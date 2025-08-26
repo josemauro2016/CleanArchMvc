@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CleanArchMvc.Infra.IoC.EntitiesConfiguration
+namespace CleanArchMvc.Infra.Data.EntitiesConfiguration
 {
     internal class ProductConfiguration : IEntityTypeConfiguration<Product>
     {

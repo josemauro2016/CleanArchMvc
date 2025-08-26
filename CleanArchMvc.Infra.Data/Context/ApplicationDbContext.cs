@@ -1,7 +1,7 @@
 ﻿using CleanArchMvc.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CleanArchMvc.Infra.IoC.Context
+namespace CleanArchMvc.Infra.Data.Context
 {
     public class ApplicationDbContext : DbContext
     {
