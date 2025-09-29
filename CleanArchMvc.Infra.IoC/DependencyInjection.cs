@@ -9,6 +9,7 @@ using CleanArchMvc.Infra.Data.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Update.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -38,7 +39,8 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 
         var myHandlers = AppDomain.CurrentDomain.Load("CleanArchMvc.Application");
-        services.AddMediatR(myHandlers);
+        //services.AddMediatR(myHandlers);
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(myHandlers));
 
         return services;
 
