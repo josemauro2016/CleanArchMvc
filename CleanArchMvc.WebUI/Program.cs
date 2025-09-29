@@ -1,26 +1,47 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using CleanArchMvc.Domain.Account;
+using CleanArchMvc.Infra.IoC;
 
-namespace CleanArchMvc.WebUI
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddinfraStructure(builder.Configuration);
+
+//Adicionando serviços ao container
+builder.Services.AddControllersWithViews();
+
+
+var app = builder.Build();
+
+//Configurando canos de requisições HTTP
+if (!app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+//ISeedUserRoleInitial.SeedRoles();
+//SeedUserRoleInitial.SeedUsers();
+SeedUserRoles(app);
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
+
+void SeedUserRoles(IApplicationBuilder app)
+{
+    using (var serviceScope = app.ApplicationServices.CreateScope())
+    {
+        var seed = serviceScope.ServiceProvider.GetService<ISeedUserRoleInitial>();
+        seed.SeedUsers();
+        seed.SeedRoles();
     }
 }
